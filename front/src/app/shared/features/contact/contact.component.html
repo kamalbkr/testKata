@@ -1,0 +1,33 @@
+<h2>Contactez-nous</h2>
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+    <div class="form-field">
+        <label for="name">Nom</label>
+        <input pInputText type="text" id="name" formControlName="name" />
+    </div>
+
+    <div class="form-field">
+        <label for="email">Email <span class="p-error">*</span> </label>
+        <input pInputText type="email" id="email" formControlName="email"
+            [class.invalid]="isInvalid('email') || (!f['email'].valid && isFormSubmitted)" />
+    </div>
+
+    <div class="form-field">
+        <label for="message">Message <span class="p-error">*</span></label>
+        <textarea pInputTextarea id="message" formControlName="message" rows="5" cols="30"
+            [class.invalid]="isInvalid('message') || (!f['message'].valid && isFormSubmitted)"></textarea>
+    </div>
+
+
+    <div class="flex justify-content-between">
+        <div>
+            @if(f['message'].errors?.['maxlength']) {
+            <div class="p-error">
+                Le message ne doit pas dépasser 300 caractères.
+            </div>
+            }
+        </div>
+        <p-button type="submit" label="Envoyer" severity="success" />
+    </div>
+
+</form>
+<p-toast></p-toast>

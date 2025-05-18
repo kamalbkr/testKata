@@ -1,0 +1,18 @@
+.app-content {
+    overflow: hidden;
+    height: 100%;
+}
+
+.cart {
+    position: relative;
+
+    i {
+        font-size: 2rem
+    }
+
+    span {
+        position: absolute;
+        top: -20px;
+        right: -5px;
+    }
+}

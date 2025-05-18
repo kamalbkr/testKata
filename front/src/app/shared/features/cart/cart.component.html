@@ -1,0 +1,30 @@
+<h2>Votre Panier</h2>
+@if(cart().length === 0){
+<div>
+    <p class="p-error">Aucun produit dans le panier.</p>
+</div>
+}
+
+@for( product of cart();track $index)
+{
+<div class="mb-3">
+    <p-card>
+        <div class="flex align-items-center gap-3">
+            <img [src]="'/assets/images-produits/' + product.image" width="80" height="80" alt="Image"
+                (error)="imageError($event)" />
+            <div class="flex flex-column">
+                <div class="text-xl font-bold">{{ product.name }}</div>
+                <div class="text-600">{{ product.category }}</div>
+                <div class="text-primary font-medium">{{ product.price | currency:'EUR' }}</div>
+            </div>
+            <div class="ml-auto">
+                <p-inputNumber [(ngModel)]="product.quantity" [min]="1" [max]="product.quantity" [useGrouping]="false"
+                    (ngModelChange)="onUpdateQuantity(product)" mode="decimal" inputId="qty-{{ product.id }}">
+                </p-inputNumber>
+
+                <p-button icon="pi pi-trash" severity="danger" label="Retirer" (onClick)="remove($index)" />
+            </div>
+        </div>
+    </p-card>
+</div>
+}

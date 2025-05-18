@@ -1,0 +1,15 @@
+form {
+    padding: 20px;
+
+    .form-field {
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0;
+
+
+    }
+
+    .invalid {
+        border: 1px solid red;
+    }
+}

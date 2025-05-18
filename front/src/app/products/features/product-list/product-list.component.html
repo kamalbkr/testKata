@@ -1,0 +1,86 @@
+<h1 class="text-center">Liste des produits</h1>
+
+<p-button label="Créer produit" (onClick)="onCreate()" class="block text-center" />
+<div class="form-field">
+    <div class="flex justify-content-start mb-3">
+        <span class="p-input-icon-left p-2 flex-1">
+            <i class="pi pi-search me-2"></i>
+
+            <input class="filter" pInputText type="text" placeholder="Rechercher par le nom de produit"
+                [(ngModel)]="filter" />
+
+
+        </span>
+    </div>
+</div>
+
+
+<p-dataView #dv [value]="filteredProducts()" layout="list" [paginator]="true" [rows]="3"
+    [rowsPerPageOptions]="[3,5,15,20]">
+    <ng-template pTemplate="list" let-products>
+        @for (product of products; track product.id) {
+        <p-card class="mb-3">
+            <div class="flex flex-column sm:flex-row align-items-center gap-3">
+                <img [src]="'/assets/images-produits/'+product.image" (error)="imageError($event)" alt="image"
+                    width="100" height="100" class="border-round shadow-2" />
+
+                <div class="flex-1">
+                    <div class="text-xl font-bold text-900 mb-1">{{ product.name }}</div>
+                    <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false" stars="5" class="mb-2" />
+                    <div class="text-sm text-600 mb-2">{{ product.description }}</div>
+                    <div class="flex flex-wrap gap-2 mb-2">
+                        <span class="p-tag p-tag-info">
+                            Catégorie : {{ product.category }}
+                        </span>
+                        <span class="p-tag p-tag-success">
+                            Prix : {{ product.price | currency:'EUR' }}
+                        </span>
+                        <span class="p-tag p-tag-warning">
+                            Quantité : {{ product.quantity }}
+                        </span>
+                        <span class="p-tag" [ngClass]="{
+                  'p-tag-success': product.inventoryStatus === 'INSTOCK',
+                  'p-tag-warning': product.inventoryStatus === 'LOWSTOCK',
+                  'p-tag-danger': product.inventoryStatus === 'OUTOFSTOCK'
+                }">
+                            {{ product.inventoryStatus }}
+                        </span>
+                        <span class="p-tag p-tag-secondary">
+                            Réf. interne : {{ product.internalReference }}
+                        </span>
+                    </div>
+                    <div class="text-xs text-500 mt-1">
+                        Créé : {{ product.createdAt | date:'dd/MM/yyyy à H:m' }} |
+                        Modifié : {{ product.updatedAt | date:'dd/MM/yyyy à H:m' }}
+                    </div>
+                </div>
+
+
+                <div>
+                    <div class="flex flex-row gap-2 mb-3 sm:mt-0">
+                        <p-button label="Modifier" severity="secondary" (onClick)="onUpdate(product)" />
+                        <p-button label="Supprimer" severity="danger" (onClick)="onDelete(product)" />
+                    </div>
+                    <div class="flex flex-row gap-2 mb-3 sm:mt-0">
+                        <p-button label="Ajouter au panier" icon="pi pi-shopping-cart"
+                            (onClick)="onAddToCart(product)" />
+                        @if(isInCart(product)){
+                        <p-inputNumber [(ngModel)]="quantities[product.id]" [min]="1" [max]="product.quantity"
+                            [useGrouping]="false" [inputStyle]="{ width: '4rem' }"
+                            (ngModelChange)="onUpdateQuatity(product)" mode="decimal" inputId="qty-{{product.id}}">
+                        </p-inputNumber>
+                        <p-button icon="pi pi-trash" severity="danger" (onClick)="onRemoveFromCart(product)" />
+
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </p-card>
+        }
+    </ng-template>
+</p-dataView>
+
+<p-dialog [(visible)]="isDialogVisible" [style]="{ width: '50vw' }" header="Ajout/Edition produit">
+    <app-product-form [product]="editedProduct()" (save)="onSave($event)" (cancel)="onCancel()" />
+</p-dialog>
