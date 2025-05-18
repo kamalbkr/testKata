@@ -1,0 +1,3 @@
+Parapport la connexion avec la base de donneés j'ai utilise PHPmyAdmin car deja installée sur mon poste.
+
+About the connection with database I used the PHPmaAdmin because I have already installed in my computer
